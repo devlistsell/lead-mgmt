@@ -90,6 +90,11 @@ class UserRepository {
         //ignore system user
         $users->where('id', '>', 0);
 
+        // Restrict data for non-admins
+        if (!auth()->user()->isAdmin) {
+            $users->where('id', auth()->id());
+        }
+
         //filter: type
         if (request()->filled('type')) {
             $users->where('type', request('type'));
