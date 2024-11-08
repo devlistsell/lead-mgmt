@@ -425,36 +425,6 @@ Route::group(['prefix' => 'proposals'], function () {
     Route::get("/{proposal}/pinning", "Proposals@togglePinning")->where('proposal', '[0-9]+');
 });
 
-//CONTRACTS
-Route::resource('contracts', 'Contracts');
-Route::group(['prefix' => 'contracts'], function () {
-    Route::any("/search", "Contracts@index");
-    Route::post("/delete", "Contracts@destroy")->middleware(['demoModeCheck']);
-    Route::get("/change-category", "Contracts@changeCategory");
-    Route::post("/change-category", "Contracts@changeCategoryUpdate");
-    Route::get("/{contract}", "Contracts@show")->where('contract', '[0-9]+');
-    Route::get("/{contract}/edit", "Contracts@editingContract")->where('contract', '[0-9]+');
-    Route::get("/{contract}/publish", "Contracts@publish")->where('contract', '[0-9]+');
-    Route::post("/{contract}/publish/scheduled", "Contracts@publishScheduled")->where('contract', '[0-9]+')->middleware(['contractsMiddlewareEdit', 'contractsMiddlewareShow']);
-    Route::get("/{contract}/resend", "Contracts@resendEmail")->where('contract', '[0-9]+');
-    Route::get("/view/{contract}", "Contracts@showPublic");
-    Route::get("/{contract}/change-status", "Contracts@changeStatus")->where('contract', '[0-9]+');
-    Route::get("/{contract}/sign/team", "Contracts@signTeam");
-    Route::post("/{contract}/sign/team", "Contracts@signTeamAction");
-    Route::get("/{contract}/sign/client", "Contracts@signClient");
-    Route::post("/{contract}/sign/client", "Contracts@signClientAction");
-    Route::delete("/{contract}/sign/delete-signature", "Contracts@signDeleteSignature");
-    Route::get("/{contract}/attach-project", "Contracts@attachProject")->where('invoice', '[0-9]+');
-    Route::post("/{contract}/attach-project", "Contracts@attachProjectUpdate")->where('invoice', '[0-9]+');
-    Route::get("/{contract}/detach-project", "Contracts@dettachProject")->where('invoice', '[0-9]+');
-    Route::get("/{contract}/clone", "Contracts@createClone")->where('project', '[0-9]+');
-    Route::post("/{contract}/clone", "Contracts@storeClone")->where('project', '[0-9]+');
-    Route::get("/{contract}/pinning", "Contracts@togglePinning")->where('contract', '[0-9]+');
-});
-
-//CONTRACT TEMPLATES
-Route::resource('templates/contracts', 'Templates\Contracts');
-
 //PROPOSAL TEMPLATES
 Route::resource('templates/proposals', 'Templates\Proposals');
 

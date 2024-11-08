@@ -168,34 +168,6 @@
                 </li>
                 <?php endif; ?>
 
-
-                <!--contracts [multiple]-->
-                <?php if(config('visibility.modules.contracts') && auth()->user()->role->role_templates_contracts > 0): ?>
-                <!--multipl menu-->
-                <li data-modular-id="main_menu_team_contracts"
-                    class="sidenav-menu-item <?php echo e($page['mainmenu_contracts'] ?? ''); ?>">
-                    <!--multiple menu-->
-                    <a class="has-arrow waves-effect waves-dark" href="javascript:void(0);" aria-expanded="false">
-                        <i class="ti-write"></i>
-                        <span class="hide-menu"><?php echo e(cleanLang(__('lang.contracts'))); ?>
-
-                        </span>
-                    </a>
-                    <ul aria-expanded="false" class="collapse">
-                        <li class="sidenav-submenu <?php echo e($page['submenu_contracts'] ?? ''); ?>" id="submenu_contracts">
-                            <a href="<?php echo e(_url('/contracts')); ?>"
-                                class="<?php echo e($page['submenu_contracts'] ?? ''); ?>"><?php echo e(cleanLang(__('lang.contracts'))); ?></a>
-                        </li>
-                        <li class="sidenav-submenu <?php echo e($page['submenu_contract_templates'] ?? ''); ?>"
-                            id="submenu_contract_templates">
-                            <a href="<?php echo e(_url('/templates/contracts')); ?>"
-                                class="<?php echo e($page['submenu_contract_templates'] ?? ''); ?>"><?php echo e(cleanLang(__('lang.templates'))); ?></a>
-                        </li>
-                    </ul>
-                </li>
-                <?php endif; ?>
-                <!--contracts-->
-
                 <!--contracts [single]-->
                 <?php if(config('visibility.modules.contracts') && auth()->user()->role->role_templates_contracts == 0): ?>
                 <li data-modular-id="main_menu_team_contracts"
