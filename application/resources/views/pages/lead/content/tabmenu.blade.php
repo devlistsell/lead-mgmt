@@ -8,10 +8,10 @@
 
                 
     <!--organisation-->
-    <li class="nav-item"> <a class="nav-link ajax-request" data-toggle="tab" href="javascript:void(0);" role="tab"
+    {{--<li class="nav-item"> <a class="nav-link ajax-request" data-toggle="tab" href="javascript:void(0);" role="tab"
         data-url="{{ url('leads/content/'.$lead->lead_id.'/show-organisation') }}" data-loading-class="loading-before-centre"
         data-loading-target="card-leads-left-panel"><span class="hidden-sm-up"><i class="ti-id-badge"></i></span><span
-            class="hidden-xs-down">@lang('lang.address')</span></a> </li>
+            class="hidden-xs-down">@lang('lang.address')</span></a> </li>--}}
 
     <!--customfields-->
     <li class="nav-item"> <a class="nav-link ajax-request" data-toggle="tab" href="javascript:void(0);" role="tab"

@@ -12,12 +12,14 @@
         </div>
 
         <!--SHOW ARCHIVED LEADS-->
+        @if(auth()->user()->is_admin || auth()->user()->role->name === 'is_team')
         <button type="button" data-toggle="tooltip" title="{{ cleanLang(__('lang.show_archive_leads')) }}"
             id="pref_filter_show_archived_leads"
             class="list-actions-button btn btn-page-actions waves-effect waves-dark js-ajax-ux-request {{ runtimeActive(auth()->user()->pref_filter_show_archived_leads) }}"
             data-url="{{ url('/leads/search?action=search&toggle=pref_filter_show_archived_leads') }}">
             <i class="ti-archive"></i>
         </button>
+        @endif
 
         <!--SHOW OWN LEADS-->
         @if( config('visibility.own_leads_toggle_button'))
@@ -77,22 +79,22 @@
         </button>
         @endif
 
-
         <!--ADD NEW ITEM-->
-        @if(config('visibility.list_page_actions_add_button'))
-        <button type="button"
-            class="btn btn-danger btn-add-circle edit-add-modal-button js-ajax-ux-request reset-target-modal-form {{ $page['add_button_classes'] ?? '' }}"
-            data-toggle="modal" data-target="#commonModal" data-url="{{ $page['add_modal_create_url'] ?? '' }}"
-            data-loading-target="commonModalBody" data-modal-title="{{ $page['add_modal_title'] ?? '' }}"
-            data-action-url="{{ $page['add_modal_action_url'] ?? '' }}"
-            data-action-method="{{ $page['add_modal_action_method'] ?? '' }}"
-            data-action-ajax-class="{{ $page['add_modal_action_ajax_class'] ?? '' }}"
-            data-modal-size="{{ $page['add_modal_size'] ?? '' }}"
-            data-action-ajax-loading-target="{{ $page['add_modal_action_ajax_loading_target'] ?? '' }}"
-            data-save-button-class="{{ $page['add_modal_save_button_class'] ?? '' }}" data-project-progress="0">
-            <i class="ti-plus"></i>
-        </button>
+        @if(config('visibility.list_page_actions_add_button') && auth()->user()->is_admin)
+            <button type="button"
+                class="btn btn-danger btn-add-circle edit-add-modal-button js-ajax-ux-request reset-target-modal-form {{ $page['add_button_classes'] ?? '' }}"
+                data-toggle="modal" data-target="#commonModal" data-url="{{ $page['add_modal_create_url'] ?? '' }}"
+                data-loading-target="commonModalBody" data-modal-title="{{ $page['add_modal_title'] ?? '' }}"
+                data-action-url="{{ $page['add_modal_action_url'] ?? '' }}"
+                data-action-method="{{ $page['add_modal_action_method'] ?? '' }}"
+                data-action-ajax-class="{{ $page['add_modal_action_ajax_class'] ?? '' }}"
+                data-modal-size="{{ $page['add_modal_size'] ?? '' }}"
+                data-action-ajax-loading-target="{{ $page['add_modal_action_ajax_loading_target'] ?? '' }}"
+                data-save-button-class="{{ $page['add_modal_save_button_class'] ?? '' }}" data-project-progress="0">
+                <i class="ti-plus"></i>
+            </button>
         @endif
+
 
         <!--add new button (link)-->
         @if( config('visibility.list_page_actions_add_button_link'))

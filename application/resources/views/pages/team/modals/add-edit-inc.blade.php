@@ -27,8 +27,15 @@
             <label
                 class="col-sm-12 col-lg-3 text-left control-label col-form-label required">{{ cleanLang(__('lang.email_address')) }}*</label>
             <div class="col-sm-12 col-lg-9">
-                <input type="text" class="form-control form-control-sm" id="email" name="email"
-                    value="{{ $user->email ?? '' }}">
+                <!-- <input type="text" class="form-control form-control-sm" id="email" name="email"
+                    value="{{ $user->email ?? '' }}"> -->
+
+                    <input type="email" class="form-control form-control-sm {{ $errors->has('email') ? 'error' : '' }}" 
+                    id="email" name="email" placeholder="" value="{{ old('email', $user->email ?? '') }}" 
+                    required>
+            @if ($errors->has('email'))
+                <span class="text-danger">{{ $errors->first('email') }}</span>
+            @endif
             </div>
         </div>
 
@@ -38,7 +45,7 @@
                 class="col-sm-12 col-lg-3 text-left control-label col-form-label">{{ cleanLang(__('lang.phone')) }}</label>
             <div class="col-sm-12 col-lg-9">
                 <input type="text" class="form-control form-control-sm" id="phone" name="phone"
-                    value="{{ $user->phone ?? '' }}">
+                    value="{{ $user->phone ?? '' }}" required pattern="[0-9]*">
             </div>
         </div>
         <!--/#[edit] phone-->

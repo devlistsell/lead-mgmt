@@ -236,45 +236,6 @@
                     </a>
                     <div class="dropdown-menu dropdown-menu-right">
 
-                        <!-- client -->
-                        @if(auth()->user()->role->role_projects >= 2)
-                        <a href="javascript:void(0)"
-                            class="dropdown-item dropdown-item-iconed edit-add-modal-button js-ajax-ux-request reset-target-modal-form"
-                            data-toggle="modal" data-target="#commonModal" data-url="{{ url('clients/create') }}"
-                            data-loading-target="commonModalBody"
-                            data-modal-title="{{ cleanLang(__('lang.add_client')) }}"
-                            data-action-url="{{ url('/clients') }}" data-action-method="POST"
-                            data-action-ajax-loading-target="commonModalBody" data-save-button-class=""
-                            data-project-progress="0">
-                            <i class="sl-icon-people"></i> {{ cleanLang(__('lang.client')) }}</a>
-                        @endif
-
-                        <!-- project -->
-                        @if(config('visibility.modules.projects') && auth()->user()->role->role_projects >= 2)
-                        <a href="javascript:void(0)"
-                            class="dropdown-item dropdown-item-iconed edit-add-modal-button js-ajax-ux-request reset-target-modal-form"
-                            data-toggle="modal" data-target="#commonModal" data-url="{{ url('projects/create') }}"
-                            data-loading-target="commonModalBody"
-                            data-modal-title="{{ cleanLang(__('lang.add_project')) }}"
-                            data-action-url="{{ url('/projects') }}" data-action-method="POST"
-                            data-action-ajax-loading-target="commonModalBody" data-save-button-class=""
-                            data-project-progress="0">
-                            <i class="ti-folder"></i> {{ cleanLang(__('lang.project')) }}</a>
-                        @endif
-
-                        <!-- task -->
-                        @if(config('visibility.modules.tasks') && auth()->user()->role->role_tasks >= 2)
-                        <a href="javascript:void(0)"
-                            class="dropdown-item dropdown-item-iconed edit-add-modal-button js-ajax-ux-request reset-target-modal-form"
-                            data-toggle="modal" data-target="#commonModal"
-                            data-url="{{ url('/tasks/create?ref=quickadd') }}" data-loading-target="commonModalBody"
-                            data-modal-title="{{ cleanLang(__('lang.add_task')) }}"
-                            data-action-url="{{url('/tasks?ref=quickadd') }}" data-action-method="POST"
-                            data-action-ajax-loading-target="commonModalBody" data-save-button-class=""
-                            data-project-progress="0">
-                            <i class="ti-menu-alt"></i> {{ cleanLang(__('lang.task')) }}</a>
-                        @endif
-
                         <!-- lead -->
                         @if(config('visibility.modules.leads') && auth()->user()->role->role_leads >= 2)
                         <a href="javascript:void(0)"
@@ -316,32 +277,6 @@
                         @endif
 
 
-                        <!-- proposal -->
-                        @if(config('visibility.modules.proposals') && auth()->user()->role->role_proposals >= 2)
-                        <a href="javascript:void(0)"
-                            class="dropdown-item dropdown-item-iconed edit-add-modal-button js-ajax-ux-request reset-target-modal-form"
-                            data-toggle="modal" data-target="#commonModal"
-                            data-url="{{ url('/proposals/create?ref=quickadd') }}" data-loading-target="commonModalBody"
-                            data-modal-title="{{ cleanLang(__('lang.add_proposal')) }}"
-                            data-action-url="{{url('/proposals?ref=quickadd') }}" data-action-method="POST"
-                            data-action-ajax-loading-target="commonModalBody" data-save-button-class=""
-                            data-project-progress="0">
-                            <i class="ti-bookmark-alt"></i> {{ cleanLang(__('lang.proposal')) }}</a>
-                        @endif
-
-
-                        <!-- contract -->
-                        @if(config('visibility.modules.contracts') && auth()->user()->role->role_contracts >= 2)
-                        <a href="javascript:void(0)"
-                            class="dropdown-item dropdown-item-iconed edit-add-modal-button js-ajax-ux-request reset-target-modal-form"
-                            data-toggle="modal" data-target="#commonModal"
-                            data-url="{{ url('/contracts/create?ref=quickadd') }}" data-loading-target="commonModalBody"
-                            data-modal-title="{{ cleanLang(__('lang.add_contract')) }}"
-                            data-action-url="{{url('/contracts?ref=quickadd') }}" data-action-method="POST"
-                            data-action-ajax-loading-target="commonModalBody" data-save-button-class=""
-                            data-project-progress="0">
-                            <i class="ti-write"></i> {{ cleanLang(__('lang.contract')) }}</a>
-                        @endif
 
                         <!-- payment -->
                         @if(config('visibility.modules.payments') && auth()->user()->role->role_invoices >= 2)

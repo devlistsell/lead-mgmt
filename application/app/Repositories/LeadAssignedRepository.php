@@ -107,4 +107,27 @@ class LeadAssignedRepository {
         return $query->get();
     }
 
+
+    /**
+     * assigned new users to a task
+     * @param int $lead_id the id of the lead
+     * @param int $user_id if specified, only this user will be assigned
+     * @return array
+     */
+    public function update($new_leads) {
+
+        $list = [];
+
+
+        foreach ($new_leads as $new_lead){
+
+            $assigned = new $this->assigned;
+            $assigned->leadsassigned_leadid = $new_lead->lead_id;
+            $assigned->leadsassigned_userid = $new_lead->lead_creatorid;
+            $assigned->save();
+        }
+
+        //return array of users
+        return $list;
+    }
 }

@@ -39,10 +39,10 @@
         <!--telephone-->
         <div class="form-group row">
             <label
-                class="col-sm-12 col-lg-3 text-left control-label col-form-label">{{ cleanLang(__('lang.telephone')) }}</label>
+                class="col-sm-12 col-lg-3 text-left control-label col-form-label required">{{ cleanLang(__('lang.telephone')) }}</label>
             <div class="col-sm-12 col-lg-9">
                 <input type="text" class="form-control form-control-sm" id="lead_phone" name="lead_phone" placeholder=""
-                    value="{{ $lead->lead_phone ?? '' }}">
+                    value="{{ $lead->lead_phone ?? '' }}" required pattern="[0-9]*">
             </div>
         </div>
         <!--email-->
@@ -50,8 +50,12 @@
             <label
                 class="col-sm-12 col-lg-3 text-left control-label col-form-label">{{ cleanLang(__('lang.email_address')) }}</label>
             <div class="col-sm-12 col-lg-9">
-                <input type="text" class="form-control form-control-sm" id="lead_email" name="lead_email" placeholder=""
-                    value="{{ $lead->lead_email ?? '' }}">
+                <input type="email" class="form-control form-control-sm {{ $errors->has('lead_email') ? 'error' : '' }}" 
+                    id="lead_email" name="lead_email" placeholder="" value="{{ old('lead_email', $lead->lead_email ?? '') }}" 
+                    required>
+            @if ($errors->has('lead_email'))
+                <span class="text-danger">{{ $errors->first('lead_email') }}</span>
+            @endif
             </div>
         </div>
 
@@ -63,7 +67,7 @@
                             config('system.settings_system_currency_symbol') }})</label>
             <div class="col-sm-12 col-lg-9">
                 <input type="number" class="form-control form-control-sm" id="lead_value" name="lead_value"
-                    placeholder="" value="{{ $lead->lead_value ?? '' }}">
+                    placeholder="" value="{{ $lead->lead_value ?? '' }}" required>
             </div>
         </div>
 
@@ -77,7 +81,7 @@
             <div class="col-sm-12 col-lg-9">
                 <select name="assigned" id="assigned"
                     class="form-control form-control-sm select2-basic select2-multiple select2-tags select2-hidden-accessible"
-                    multiple="multiple" tabindex="-1" aria-hidden="true">
+                    multiple="multiple" tabindex="-1" aria-hidden="true" required>
 
                     <!--array of assigned-->
                     @if(isset($page['section']) && $page['section'] == 'edit' && isset($lead->assigned))
@@ -96,9 +100,6 @@
             </div>
         </div>
         @endif
-
-
-
 
         <!--status-->
         @if(request('status') != '' && array_key_exists(request('status'), config('system.lead_statuses')))
@@ -239,7 +240,6 @@
             </div>
 
 
-
             <!--contacted-->
             <div class="form-group row">
                 <label
@@ -257,7 +257,6 @@
             <div class="line"></div>
         </div>
         <!--lead details-->
-
 
 
         <!--CUSTOMER FIELDS [collapsed]-->
@@ -289,7 +288,6 @@
         </div>
         @endif
         <!--/#CUSTOMER FIELDS [collapsed]-->
-
 
 
         <!--address and organisation - toggle-->

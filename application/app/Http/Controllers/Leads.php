@@ -72,6 +72,7 @@ use Intervention\Image\Exception\NotReadableException;
 use Validator;
 use App\Http\Responses\Leads\PinningResponse;
 use App\Repositories\PinnedRepository;
+use Illuminate\Validation\Rule;
 
 class Leads extends Controller {
 
@@ -553,6 +554,7 @@ class Leads extends Controller {
         }
 
         //create the lead
+
         if (!$lead_id = $this->leadrepo->create($position)) {
             abort(409);
         }
@@ -560,8 +562,15 @@ class Leads extends Controller {
         //add tags
         $this->tagrepo->add('lead', $lead_id);
 
+        $unique_lead_num = $this->leadmodel::where('lead_id',$lead_id)->select('lead_uniqueid')->first();
+
         //assign project
         $assigned_users = $assignedrepo->add($lead_id);
+
+        $new_leads = $this->leadmodel::where('lead_uniqueid',$unique_lead_num->lead_uniqueid)
+            ->select('lead_id', 'lead_creatorid')->whereNotIn('lead_id',[$lead_id])->get();
+        
+        $assignedrepo->update($new_leads);
 
         //get the leads object (friendly for rendering in blade template)
         $leads = $this->leadrepo->search($lead_id);
@@ -3875,4 +3884,17 @@ class Leads extends Controller {
         //TO DO IN THE FUTURE
         return [];
     }
+
+    public function rules()
+    {
+        return [
+            'lead_email' => [
+                'required',
+                'email',
+                Rule::unique('leads', 'lead_email')->ignore($this->lead),
+            ],
+            
+        ];
+    }
+
 }

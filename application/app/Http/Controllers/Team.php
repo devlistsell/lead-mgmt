@@ -391,7 +391,7 @@ class Team extends Controller {
 
         //default modal settings (modify for sepecif sections)
         $page += [
-            'add_modal_title' => __('lang.add_user'),
+            'add_modal_title' => __('lang.add_partner'),
             'add_modal_create_url' => url('team/create'),
             'add_modal_action_url' => url('team'),
             'add_modal_action_ajax_class' => '',
@@ -443,5 +443,17 @@ class Team extends Controller {
 
         //return
         return $page;
+    }
+
+    public function rules()
+    {
+        return [
+            'email' => [
+                'required',
+                'email',
+                Rule::unique('users', 'lead_email')->ignore($this->lead),
+            ],
+            
+        ];
     }
 }

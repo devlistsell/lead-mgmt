@@ -1,16 +1,21 @@
     <!----------Assigned----------->
-    <div class="x-section">
-        <div class="x-title">
-            <h6>{{ cleanLang(__('lang.assigned_users')) }}</h6>
+    @if(auth()->user()->role->role_id == 1)
+        <div class="x-section">
+            <div class="x-title">
+                <h6>{{ cleanLang(__('lang.assigned_users')) }}</h6>
+            </div>
+            <span id="lead-assigned-container" class="">
+                @include('pages.lead.components.assigned')
+            </span>
+            <!--user-->
+            <span class="x-assigned-user x-assign-new js-card-settings-button-static card-lead-assigned text-info" 
+                data-container=".card-modal" tabindex="0" data-popover-content="card-lead-team" 
+                data-title="{{ cleanLang(__('lang.assign_users')) }}">
+                <i class="mdi mdi-plus"></i>
+            </span>
         </div>
-        <span id="lead-assigned-container" class="">
-            @include('pages.lead.components.assigned')
-        </span>
-        <!--user-->
-        <span class="x-assigned-user x-assign-new js-card-settings-button-static card-lead-assigned text-info" data-container=".card-modal" 
-            tabindex="0" data-popover-content="card-lead-team" data-title="{{ cleanLang(__('lang.assign_users')) }}"><i
-                class="mdi mdi-plus"></i></span>
-    </div>
+    @endif
+
 
     <!----------settings----------->
     <div class="x-section">
@@ -134,11 +139,11 @@
 
 
         <!--reminder-->
-        @if(config('visibility.modules.reminders'))
+        {{--@if(config('visibility.modules.reminders'))
         <div class="card-reminders-container" id="card-reminders-container">
             @include('pages.reminders.cards.wrapper')
         </div>
-        @endif
+        @endif--}}
 
     </div>
 
@@ -146,54 +151,49 @@
 
 
     <!----------tags----------->
+    @if(auth()->user()->role->role_id == 1)
     <div class="card-tags-container" id="card-tags-container">
         @include('pages.lead.components.tags')
     </div>
+    @endif
 
 
     <!----------actions----------->
-    <div class="x-section">
-        <div class="x-title">
-            <h6>{{ cleanLang(__('lang.actions')) }}</h6>
+    @if(auth()->user()->role->role_id == 1)
+        <div class="x-section">
+            <div class="x-title">
+                <h6>{{ cleanLang(__('lang.actions')) }}</h6>
+            </div>
+            
+            <!--archive-->
+            @if($lead->permission_edit_lead && runtimeArchivingOptions())
+            <div class="x-element x-action confirm-action-info  {{ runtimeActivateOrAchive('archive-button', $lead->lead_active_state) }} card_archive_button_{{ $lead->lead_id }}"
+                id="card_archive_button_{{ $lead->lead_id }}" data-confirm-title="{{ cleanLang(__('lang.archive_lead')) }}"
+                data-confirm-text="{{ cleanLang(__('lang.are_you_sure')) }}" data-ajax-type="PUT"
+                data-url="{{ url('/') }}/leads/{{ $lead->lead_id }}/archive"><i class="mdi mdi-archive"></i> <span
+                    class="x-highlight" id="lead-start-date">{{ cleanLang(__('lang.archive')) }}</span></span></div>
+            @endif
+
+            <!--restore-->
+            @if($lead->permission_edit_lead && runtimeArchivingOptions())
+            <div class="x-element x-action confirm-action-info  {{ runtimeActivateOrAchive('activate-button', $lead->lead_active_state) }} card_restore_button_{{ $lead->lead_id }}"
+                id="card_restore_button_{{ $lead->lead_id }}" data-confirm-title="{{ cleanLang(__('lang.restore_lead')) }}"
+                data-confirm-text="{{ cleanLang(__('lang.are_you_sure')) }}" data-ajax-type="PUT"
+                data-url="{{ url('/') }}/leads/{{ $lead->lead_id }}/activate"><i class="mdi mdi-archive"></i> <span
+                    class="x-highlight" id="lead-start-date">{{ cleanLang(__('lang.restore')) }}</span></span></div>
+            @endif
+
+
+            <!--delete-->
+            @if($lead->permission_delete_lead)
+            <div class="x-element x-action confirm-action-danger"
+                data-confirm-title="{{ cleanLang(__('lang.delete_item')) }}"
+                data-confirm-text="{{ cleanLang(__('lang.are_you_sure')) }}" data-ajax-type="DELETE"
+                data-url="{{ url('/') }}/leads/{{ $lead->lead_id }}"><i class="mdi mdi-delete"></i> <span
+                    class="x-highlight" id="lead-start-date">{{ cleanLang(__('lang.delete')) }}</span></span></div>
+            @endif
         </div>
-        <!--convert to customer-->
-        @if($lead->permission_edit_lead && $lead->lead_converted == 'no')
-        <div class="x-element x-action js-lead-convert-to-customer" id="card-lead-milestone" tabindex="0"
-             data-url="{{ url('leads/'.$lead->lead_id.'/convert-details') }}"
-            data-popover-content="card-lead-milestones" data-title="{{ cleanLang(__('lang.convert_to_customer')) }}"><i
-                class="mdi mdi-redo-variant"></i>
-            <span class="x-highlight">@lang('lang.convert_to_customer')</strong></span>
-        </div>
-        @endif
-
-        <!--archive-->
-        @if($lead->permission_edit_lead && runtimeArchivingOptions())
-        <div class="x-element x-action confirm-action-info  {{ runtimeActivateOrAchive('archive-button', $lead->lead_active_state) }} card_archive_button_{{ $lead->lead_id }}"
-            id="card_archive_button_{{ $lead->lead_id }}" data-confirm-title="{{ cleanLang(__('lang.archive_lead')) }}"
-            data-confirm-text="{{ cleanLang(__('lang.are_you_sure')) }}" data-ajax-type="PUT"
-            data-url="{{ url('/') }}/leads/{{ $lead->lead_id }}/archive"><i class="mdi mdi-archive"></i> <span
-                class="x-highlight" id="lead-start-date">{{ cleanLang(__('lang.archive')) }}</span></span></div>
-        @endif
-
-        <!--restore-->
-        @if($lead->permission_edit_lead && runtimeArchivingOptions())
-        <div class="x-element x-action confirm-action-info  {{ runtimeActivateOrAchive('activate-button', $lead->lead_active_state) }} card_restore_button_{{ $lead->lead_id }}"
-            id="card_restore_button_{{ $lead->lead_id }}" data-confirm-title="{{ cleanLang(__('lang.restore_lead')) }}"
-            data-confirm-text="{{ cleanLang(__('lang.are_you_sure')) }}" data-ajax-type="PUT"
-            data-url="{{ url('/') }}/leads/{{ $lead->lead_id }}/activate"><i class="mdi mdi-archive"></i> <span
-                class="x-highlight" id="lead-start-date">{{ cleanLang(__('lang.restore')) }}</span></span></div>
-        @endif
-
-
-        <!--delete-->
-        @if($lead->permission_delete_lead)
-        <div class="x-element x-action confirm-action-danger"
-            data-confirm-title="{{ cleanLang(__('lang.delete_item')) }}"
-            data-confirm-text="{{ cleanLang(__('lang.are_you_sure')) }}" data-ajax-type="DELETE"
-            data-url="{{ url('/') }}/leads/{{ $lead->lead_id }}"><i class="mdi mdi-delete"></i> <span
-                class="x-highlight" id="lead-start-date">{{ cleanLang(__('lang.delete')) }}</span></span></div>
-        @endif
-    </div>
+    @endif
 
     <!----------meta infor----------->
     <div class="x-section">

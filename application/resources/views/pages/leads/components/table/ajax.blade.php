@@ -251,58 +251,58 @@
         </span>
         <!--action button-->
         <!--more button (team)-->
-        @if(config('visibility.action_buttons_edit'))
-        <span class="list-table-action dropdown font-size-inherit">
-            <button type="button" id="listTableAction" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
-                title="{{ cleanLang(__('lang.more')) }}"
-                class="data-toggle-action-tooltip btn btn-outline-default-light btn-circle btn-sm">
-                <i class="ti-more"></i>
-            </button>
-            <div class="dropdown-menu" aria-labelledby="listTableAction">
-                <!--change category-->
-                @if($lead->permission_edit_lead)
-                <a class="dropdown-item actions-modal-button js-ajax-ux-request reset-target-modal-form"
-                    href="javascript:void(0)" data-toggle="modal" data-target="#actionsModal"
-                    data-modal-title="{{ cleanLang(__('lang.change_category')) }}"
-                    data-url="{{ url('/leads/change-category') }}"
-                    data-action-url="{{ urlResource('/leads/change-category?id='.$lead->lead_id) }}"
-                    data-loading-target="actionsModalBody" data-action-method="POST">
-                    {{ cleanLang(__('lang.change_category')) }}</a>
-                <!--change status-->
-                <a class="dropdown-item actions-modal-button js-ajax-ux-request reset-target-modal-form"
-                    href="javascript:void(0)" data-toggle="modal" data-target="#actionsModal"
-                    data-modal-title="{{ cleanLang(__('lang.change_status')) }}"
-                    data-url="{{ urlResource('/leads/'.$lead->lead_id.'/change-status') }}"
-                    data-action-url="{{ urlResource('/leads/'.$lead->lead_id.'/change-status') }}"
-                    data-loading-target="actionsModalBody" data-action-method="POST">
-                    {{ cleanLang(__('lang.change_status')) }}</a>
+        @if(config('visibility.action_buttons_edit') && auth()->user()->role->role_id == '1') 
+            <span class="list-table-action dropdown font-size-inherit">
+                <button type="button" id="listTableAction" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
+                    title="{{ cleanLang(__('lang.more')) }}"
+                    class="data-toggle-action-tooltip btn btn-outline-default-light btn-circle btn-sm">
+                    <i class="ti-more"></i>
+                </button>
+                <div class="dropdown-menu" aria-labelledby="listTableAction">
+                    <!--change category-->
+                    @if($lead->permission_edit_lead)
+                    <a class="dropdown-item actions-modal-button js-ajax-ux-request reset-target-modal-form"
+                        href="javascript:void(0)" data-toggle="modal" data-target="#actionsModal"
+                        data-modal-title="{{ cleanLang(__('lang.change_category')) }}"
+                        data-url="{{ url('/leads/change-category') }}"
+                        data-action-url="{{ urlResource('/leads/change-category?id='.$lead->lead_id) }}"
+                        data-loading-target="actionsModalBody" data-action-method="POST">
+                        {{ cleanLang(__('lang.change_category')) }}</a>
+                    <!--change status-->
+                    <a class="dropdown-item actions-modal-button js-ajax-ux-request reset-target-modal-form"
+                        href="javascript:void(0)" data-toggle="modal" data-target="#actionsModal"
+                        data-modal-title="{{ cleanLang(__('lang.change_status')) }}"
+                        data-url="{{ urlResource('/leads/'.$lead->lead_id.'/change-status') }}"
+                        data-action-url="{{ urlResource('/leads/'.$lead->lead_id.'/change-status') }}"
+                        data-loading-target="actionsModalBody" data-action-method="POST">
+                        {{ cleanLang(__('lang.change_status')) }}</a>
 
-                <!--archive-->
-                @if($lead->lead_active_state == 'active' && runtimeArchivingOptions())
-                <a class="dropdown-item confirm-action-info"
-                    data-confirm-title="{{ cleanLang(__('lang.archive_lead')) }}"
-                    data-confirm-text="{{ cleanLang(__('lang.are_you_sure')) }}" data-ajax-type="PUT"
-                    data-url="{{ urlResource('/leads/'.$lead->lead_id.'/archive') }}">
-                    {{ cleanLang(__('lang.archive')) }}
-                </a>
-                @endif
+                    <!--archive-->
+                    @if($lead->lead_active_state == 'active' && runtimeArchivingOptions())
+                    <a class="dropdown-item confirm-action-info"
+                        data-confirm-title="{{ cleanLang(__('lang.archive_lead')) }}"
+                        data-confirm-text="{{ cleanLang(__('lang.are_you_sure')) }}" data-ajax-type="PUT"
+                        data-url="{{ urlResource('/leads/'.$lead->lead_id.'/archive') }}">
+                        {{ cleanLang(__('lang.archive')) }}
+                    </a>
+                    @endif
 
-                <!--activate-->
-                @if($lead->lead_active_state == 'archived' && runtimeArchivingOptions())
-                <a class="dropdown-item confirm-action-info"
-                    data-confirm-title="{{ cleanLang(__('lang.restore_lead')) }}"
-                    data-confirm-text="{{ cleanLang(__('lang.are_you_sure')) }}" data-ajax-type="PUT"
-                    data-url="{{ urlResource('/leads/'.$lead->lead_id.'/activate') }}">
-                    {{ cleanLang(__('lang.restore')) }}
-                </a>
-                @endif
+                    <!--activate-->
+                    @if($lead->lead_active_state == 'archived' && runtimeArchivingOptions())
+                    <a class="dropdown-item confirm-action-info"
+                        data-confirm-title="{{ cleanLang(__('lang.restore_lead')) }}"
+                        data-confirm-text="{{ cleanLang(__('lang.are_you_sure')) }}" data-ajax-type="PUT"
+                        data-url="{{ urlResource('/leads/'.$lead->lead_id.'/activate') }}">
+                        {{ cleanLang(__('lang.restore')) }}
+                    </a>
+                    @endif
 
 
-                @else
-                <span class="small">--- no options avaiable</span>
-                @endif
-            </div>
-        </span>
+                    @else
+                    <span class="small">--- no options avaiable</span>
+                    @endif
+                </div>
+            </span>
         @endif
         <!--more button-->
 

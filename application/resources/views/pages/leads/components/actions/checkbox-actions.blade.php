@@ -12,6 +12,7 @@
         </button>
         @endif
 
+         @if(config('visibility.list_page_actions_add_button') && auth()->user()->is_admin)
         <!--change category-->
         <button type="button"
             class="btn btn-sm btn-default waves-effect waves-dark actions-modal-button js-ajax-ux-request"
@@ -34,6 +35,7 @@
             data-skip-checkboxes-reset="TRUE" id="checkbox-actions-change-category-leads">
             <i class="ti-bookmark"></i> @lang('lang.change_status')
         </button>
+        @endif
 
         @if(auth()->user()->role->role_assign_leads == 'yes')
         <!--assign users-->

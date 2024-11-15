@@ -107,6 +107,8 @@ class LeadRepository {
         //default where
         $leads->whereRaw("1 = 1");
 
+        $leads->where('lead_creatorid', auth()->id());
+        
         //filter for active or archived (default to active) - do not use this when a lead id has been specified
         if (!is_numeric($id)) {
             if (!request()->filled('filter_show_archived_leads') && !request()->filled('filter_lead_state')) {
@@ -305,7 +307,7 @@ class LeadRepository {
      * @param array $position new record position
      * @return mixed object|bool
      */
-    public function create($position = '') {
+    public function create($position = '', $assigned_users= '') {
 
         //validate
         if (!is_numeric($position)) {
@@ -316,9 +318,10 @@ class LeadRepository {
         //save new user
         $lead = new $this->leads;
 
+        $str_unique = str_unique();
         //data
         $lead->lead_creatorid = auth()->id();
-        $lead->lead_uniqueid = str_unique();
+        $lead->lead_uniqueid = $str_unique;
         $lead->lead_firstname = request('lead_firstname');
         $lead->lead_lastname = request('lead_lastname');
         $lead->lead_email = request('lead_email');
@@ -340,6 +343,48 @@ class LeadRepository {
         $lead->lead_position = $position;
         $lead->lead_categoryid = request('lead_categoryid');
 
+        
+        $assigned_users = request('assigned');
+
+        foreach ($assigned_users as $assigned_user_id) 
+        {
+
+            if(auth()->id() == $assigned_user_id)
+            {
+                continue;
+            }
+
+            $lead_new = new $this->leads;
+
+            //data
+            $lead_new->lead_creatorid = $assigned_user_id;
+            $lead_new->lead_uniqueid = $str_unique;
+            $lead_new->lead_firstname = request('lead_firstname');
+            $lead_new->lead_lastname = request('lead_lastname');
+            $lead_new->lead_email = request('lead_email');
+            $lead_new->lead_phone = request('lead_phone');
+            $lead_new->lead_job_position = request('lead_job_position');
+            $lead_new->lead_company_name = request('lead_company_name');
+            $lead_new->lead_website = request('lead_website');
+            $lead_new->lead_street = request('lead_street');
+            $lead_new->lead_city = request('lead_city');
+            $lead_new->lead_state = request('lead_state');
+            $lead_new->lead_zip = request('lead_zip');
+            $lead_new->lead_country = request('lead_country');
+            $lead_new->lead_source = request('lead_source');
+            $lead_new->lead_title = request('lead_title');
+            $lead_new->lead_description = request('lead_description');
+            $lead_new->lead_value = request('lead_value');
+            $lead_new->lead_last_contacted = request('lead_last_contacted'); //or \Carbon\Carbon::now()
+            $lead_new->lead_status = request('lead_status');
+            $lead_new->lead_position = $position;
+            $lead_new->lead_categoryid = request('lead_categoryid');
+
+            //save and return id
+            $lead_new->save();
+
+        }
+
         //save and return id
         if ($lead->save()) {
             //apply custom fields data
@@ -348,6 +393,7 @@ class LeadRepository {
         } else {
             return false;
         }
+        
     }
 
     /**

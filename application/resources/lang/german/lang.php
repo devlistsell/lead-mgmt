@@ -136,7 +136,7 @@ return [
 'assigned_to_you' => "Ihnen zugewiesen",
 'assigned_to' => "Zugewiesen an",
 'assigned_user_permissions' => "Zugewiesene Benutzerberechtigungen",
-'assigned_users' => "Zugewiesene Benutzer",
+'assigned_users' => "Zugewiesene Partner", 
 'assigned' => "Zugewiesen",
 'assigning_users_to_a_task_info' => "Eine Aufgabe kann nur Benutzern zugewiesen werden, die dem ausgewählten Projekt bereits zugewiesen sind.",
 'at' => "Beim",
@@ -1244,9 +1244,9 @@ return [
 'tax' => "MwSt",
 'team_emails' => "Team-E-Mails",
 'team_member' => "Teammitglied",
-'team_members' => "Teammitglieder",
+'team_members' => "Partner-Angebote",
 'team_permissions' => "Teamberechtigungen",
-'team' => "Mannschaft",
+'team' => "Partner",
 'telephone' => "Telefon",
 'template_variables' => "Vorlagenvariablen",
 'template' => "Vorlage",
@@ -1997,7 +1997,7 @@ return [
 'estimate_notes_info' => "Diese Notizen werden angezeigt, wenn Sie einen Kostenvoranschlag oder eine Rechnung bearbeiten. Diese Notizen sind für den Client nicht sichtbar",
 'online' => "Online",
 'offline' => "Offline",
-'all_team_members' => "Alle Teammitglieder",
+'all_team_members' => "Alle Partner",
 'delete_message' => "Nachricht löschen",
 'send_files' => "Dateien senden",
 'chat' => "Plaudern",
@@ -2338,6 +2338,6 @@ return [
 'billed' => "In Rechnung gestellt",
 'unbilled' => "Nicht in Rechnung gestellt",
 'no_of_tasks' => "Anzahl der Aufgaben",
-
+'add_partner' => "Neuen Partner erstellen",
 
 ];
