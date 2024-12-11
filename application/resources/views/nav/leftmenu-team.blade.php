@@ -67,6 +67,21 @@
                 @endif
                 <!--leads-->
 
+                
+                <!-- user activity 19 nov 2024-->
+                {{--@if(auth()->user()->role->role_name == "Administrator")
+                <li data-modular-id="main_menu_user_activity"
+                    class="sidenav-menu-item {{ $page['mainmenu_leads'] ?? '' }} menu-tooltip menu-with-tooltip"
+                    title="{{ cleanLang(__('lang.useractivity')) }}">
+                    <a class="waves-effect waves-dark" href="/useractivity" aria-expanded="false" target="_self">
+                        <i class="sl-icon-call-in"></i>
+                        <span class="hide-menu">{{ cleanLang(__('lang.useractivity')) }}
+                        </span>
+                    </a>
+                </li>
+                @endif--}}
+                <!--user activity-->
+
                 <!--sales-->
                 @if(runtimeGroupMenuVibility([config('visibility.modules.invoices'),
                 config('visibility.modules.payments'), config('visibility.modules.estimates'),

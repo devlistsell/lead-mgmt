@@ -155,6 +155,9 @@
                     @endif
                     <div id="invoice-terms">{!! clean($bill->bill_terms) !!}</div>
                 </div>
+                <!--[invoice] - make payment-->
+                        <button class="btn btn-danger" id="invoice-make-payment-button">
+                            {{ cleanLang(__('lang.make_a_payment')) }} </button>
                 <!--client - make a payment button-->
                 @if((auth()->check() && auth()->user()->is_client) || config('visibility.public_bill_viewing'))
                 <hr>

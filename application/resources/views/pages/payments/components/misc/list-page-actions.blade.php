@@ -43,7 +43,7 @@
         @endif
 
         <!--ADD NEW ITEM-->
-        @if(config('visibility.list_page_actions_add_button'))
+        @if(config('visibility.list_page_actions_add_button') && auth()->user()->is_admin)
         <button type="button"
             class="btn btn-danger btn-add-circle edit-add-modal-button js-ajax-ux-request reset-target-modal-form {{ $page['add_button_classes'] ?? '' }}"
             data-toggle="modal" data-target="#commonModal" data-url="{{ $page['add_modal_create_url'] ?? '' }}"

@@ -10,6 +10,7 @@
 namespace App\Http\Responses\Payments;
 use Illuminate\Contracts\Support\Responsable;
 
+
 class IndexResponse implements Responsable {
 
     private $payload;

@@ -70,6 +70,11 @@
                 <?php endif; ?>
                 <!--leads-->
 
+                
+                <!-- user activity 19 nov 2024-->
+                
+                <!--user activity-->
+
                 <!--sales-->
                 <?php if(runtimeGroupMenuVibility([config('visibility.modules.invoices'),
                 config('visibility.modules.payments'), config('visibility.modules.estimates'),

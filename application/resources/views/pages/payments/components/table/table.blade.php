@@ -6,7 +6,7 @@
                 data-page-size="10">
                 <thead>
                     <tr>
-                        @if(config('visibility.payments_col_checkboxes'))
+                        @if(config('visibility.payments_col_checkboxes') && auth()->user()->role->role_id == '1')
                         <th class="list-checkbox-wrapper payments_col_checkbox">
                             <!--list checkbox-->
                             <span class="list-checkboxes display-inline-block w-px-20">
@@ -45,20 +45,7 @@
                             data-url="{{ urlResource('/payments?action=sort&orderby=payment_amount&sortorder=asc') }}">{{ cleanLang(__('lang.amount')) }}<span
                                 class="sorting-icons"><i class="ti-arrows-vertical"></i></span></a>
                     </th>
-                        @if(config('visibility.payments_col_client'))
-                        <th class="payments_col_client"><a class="js-ajax-ux-request js-list-sorting" id="sort_client"
-                                href="javascript:void(0)"
-                                data-url="{{ urlResource('/payments?action=sort&orderby=client&sortorder=asc') }}">{{ cleanLang(__('lang.client')) }}<span
-                                    class="sorting-icons"><i class="ti-arrows-vertical"></i></span></a>
-                        </th>
-                        @endif
-                        @if(config('visibility.payments_col_project'))
-                        <th class="payments_col_project"><a class="js-ajax-ux-request js-list-sorting" id="sort_project"
-                                href="javascript:void(0)"
-                                data-url="{{ urlResource('/payments?action=sort&orderby=project&sortorder=asc') }}">{{ cleanLang(__('lang.project')) }}<span
-                                    class="sorting-icons"><i class="ti-arrows-vertical"></i></span></a>
-                        </th>
-                        @endif
+                        
                         <th class="payments_col_transaction hidden"><a class="js-ajax-ux-request js-list-sorting"
                                 id="sort_payment_transaction_id" href="javascript:void(0)"
                                 data-url="{{ urlResource('/payments?action=sort&orderby=payment_transaction_id&sortorder=asc') }}">{{ cleanLang(__('lang.transaction_id')) }}<span

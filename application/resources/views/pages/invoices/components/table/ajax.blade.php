@@ -1,7 +1,7 @@
 @foreach($invoices as $invoice)
 <!--each row-->
 <tr id="invoice_{{ $invoice->bill_invoiceid  }}" class="{{ $invoice->pinned_status ?? '' }}">
-    @if(config('visibility.invoices_col_checkboxes'))
+    @if(config('visibility.invoices_col_checkboxes') && auth()->user()->role->role_id == '1')
     <td class="invoices_col_checkbox checkitem" id="invoices_col_checkbox_{{ $invoice->bill_invoiceid }}">
         <!--list checkbo-->
         <span class="list-checkboxes display-inline-block w-px-20">
@@ -56,19 +56,14 @@
     <!--tableconfig_column_5 [company name]-->
     <td class="invoices_col_tableconfig_column_5 {{ config('table.tableconfig_column_5') }} tableconfig_column_5"
         id="invoices_col_company_{{ $invoice->bill_invoiceid }}">
-        <a href="/clients/{{ $invoice->bill_clientid }}">{{ str_limit($invoice->client_company_name ?? '---', 22) }}</a>
+        {{ str_limit($invoice->contact_name ?? '---', 22) }}
     </td>
 
     <!--tableconfig_column_6 [client contact] -->
     <td class="invoices_col_tableconfig_column_6 {{ config('table.tableconfig_column_6') }} tableconfig_column_6"
         id="invoices_col_tableconfig_column_6_{{ $invoice->bill_invoiceid }}">
         @if(isset($invoice->contact_name) && $invoice->contact_name != '')
-        <a href="javascript:void(0);" class="edit-add-modal-button js-ajax-ux-request reset-target-modal-form"
-            data-toggle="modal" data-target="#commonModal" data-url="{{ url('contacts/'.$invoice->contact_id) }}"
-            data-loading-target="commonModalBody" data-modal-title="" data-modal-size="modal-md"
-            data-header-close-icon="hidden" data-header-extra-close-icon="visible" data-footer-visibility="hidden"
-            data-action-ajax-loading-target="commonModalBody">{{ $invoice->contact_name }}
-        </a>
+        {{ $invoice->contact_name }}
         @else
         <span>---</span>
         @endif
@@ -233,7 +228,7 @@
                 <i class="ti-import"></i></a>
             @endif
             <!--delete-->
-            @if(config('visibility.action_buttons_delete'))
+            @if(config('visibility.action_buttons_delete') && auth()->user()->role->role_id == '1')
             <button type="button" title="{{ cleanLang(__('lang.delete')) }}"
                 class="data-toggle-action-tooltip btn btn-outline-danger btn-circle btn-sm confirm-action-danger"
                 data-confirm-title="{{ cleanLang(__('lang.delete_invoice')) }}"
@@ -243,7 +238,7 @@
             </button>
             @endif
             <!--edit-->
-            @if(config('visibility.action_buttons_edit'))
+            @if(config('visibility.action_buttons_edit') && auth()->user()->role->role_id == '1')
             <a href="/invoices/{{ $invoice->bill_invoiceid }}/edit-invoice" title="{{ cleanLang(__('lang.edit')) }}"
                 class="data-toggle-action-tooltip btn btn-outline-info btn-circle btn-sm">
                 <i class="sl-icon-note"></i>
@@ -255,7 +250,7 @@
             </a>
 
             <!--more button (team)-->
-            @if(auth()->user()->is_team)
+            @if(auth()->user()->is_team && auth()->user()->role->role_id == '1') 
             <span class="list-table-action dropdown font-size-inherit">
                 <button type="button" id="listTableAction" data-toggle="dropdown" aria-haspopup="true"
                     aria-expanded="false" title="{{ cleanLang(__('lang.more')) }}"
@@ -291,16 +286,6 @@
                         data-loading-target="actionsModalBody" data-action-method="POST">
                         {{ cleanLang(__('lang.add_new_payment')) }}</a>
                     @endif
-                    <!--clone invoice-->
-                    @if(auth()->user()->role->role_invoices > 1)
-                    <a class="dropdown-item actions-modal-button js-ajax-ux-request reset-target-modal-form edit-add-modal-button"
-                        href="javascript:void(0)" data-toggle="modal" data-target="#commonModal"
-                        data-modal-title="{{ cleanLang(__('lang.clone_invoice')) }}"
-                        data-url="{{ url('/invoices/'.$invoice->bill_invoiceid.'/clone') }}"
-                        data-action-url="{{ url('/invoices/'.$invoice->bill_invoiceid.'/clone') }}"
-                        data-loading-target="actionsModalBody" data-action-method="POST">
-                        {{ cleanLang(__('lang.clone_invoice')) }}</a>
-                    @endif
                     <!--change category-->
                     <a class="dropdown-item actions-modal-button js-ajax-ux-request reset-target-modal-form"
                         href="javascript:void(0)" data-toggle="modal" data-target="#actionsModal"
@@ -309,41 +294,6 @@
                         data-action-url="{{ urlResource('/invoices/change-category?id='.$invoice->bill_invoiceid) }}"
                         data-loading-target="actionsModalBody" data-action-method="POST">
                         {{ cleanLang(__('lang.change_category')) }}</a>
-                    <!--attach project -->
-                    @if(!is_numeric($invoice->bill_projectid))
-                    <a class="dropdown-item actions-modal-button js-ajax-ux-request reset-target-modal-form"
-                        href="javascript:void(0)" data-toggle="modal" data-target="#actionsModal"
-                        data-modal-title=" {{ cleanLang(__('lang.attach_to_project')) }}"
-                        data-url="{{ urlResource('/invoices/'.$invoice->bill_invoiceid.'/attach-project?client_id='.$invoice->bill_clientid) }}"
-                        data-action-url="{{ urlResource('/invoices/'.$invoice->bill_invoiceid.'/attach-project') }}"
-                        data-loading-target="actionsModalBody" data-action-method="POST">
-                        {{ cleanLang(__('lang.attach_to_project')) }}</a>
-                    @endif
-                    <!--dettach project -->
-                    @if(is_numeric($invoice->bill_projectid))
-                    <a class="dropdown-item confirm-action-danger" href="javascript:void(0)"
-                        data-confirm-title="{{ cleanLang(__('lang.detach_from_project')) }}"
-                        data-confirm-text="{{ cleanLang(__('lang.are_you_sure')) }}"
-                        data-url="{{ urlResource('/invoices/'.$invoice->bill_invoiceid.'/detach-project') }}">
-                        {{ cleanLang(__('lang.detach_from_project')) }}</a>
-                    @endif
-                    <!--recurring settings-->
-                    <a class="dropdown-item edit-add-modal-button js-ajax-ux-request reset-target-modal-form"
-                        href="javascript:void(0)" data-toggle="modal" data-target="#commonModal"
-                        data-url="{{ urlResource('/invoices/'.$invoice->bill_invoiceid.'/recurring-settings?source=page') }}"
-                        data-loading-target="commonModalBody"
-                        data-modal-title="{{ cleanLang(__('lang.recurring_settings')) }}"
-                        data-action-url="{{ urlResource('/invoices/'.$invoice->bill_invoiceid.'/recurring-settings?source=page') }}"
-                        data-action-method="POST"
-                        data-action-ajax-loading-target="invoices-td-container">{{ cleanLang(__('lang.recurring_settings')) }}</a>
-                    <!--stop recurring -->
-                    @if($invoice->bill_recurring == 'yes')
-                    <a class="dropdown-item confirm-action-info" href="javascript:void(0)"
-                        data-confirm-title="{{ cleanLang(__('lang.stop_recurring')) }}"
-                        data-confirm-text="{{ cleanLang(__('lang.are_you_sure')) }}"
-                        data-url="{{ urlResource('/invoices/'.$invoice->bill_invoiceid.'/stop-recurring') }}">
-                        {{ cleanLang(__('lang.stop_recurring')) }}</a>
-                    @endif
                     @endif
                     <a class="dropdown-item"
                         href="{{ url('payments?filter_payment_invoiceid='.$invoice->bill_invoiceid) }}">

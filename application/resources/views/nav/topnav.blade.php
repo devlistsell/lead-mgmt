@@ -514,7 +514,7 @@
 
                             <li role="separator" class="divider"></li>
                             <li>
-                                <a href="/logout">
+                                <a href="{{ route('logout') }}">
                                     <i class="fa fa-power-off p-r-4"></i> {{ cleanLang(__('lang.logout')) }}</a>
                             </li>
                         </ul>

@@ -309,6 +309,9 @@ class Invoices extends Controller {
      */
     public function create(CategoryRepository $categoryrepo) {
 
+        //staff users
+        $users = $this->userrepo->getStaffUsers();
+
         //invoice categories
         $categories = $categoryrepo->get('invoice');
 
@@ -321,6 +324,7 @@ class Invoices extends Controller {
             'categories' => $categories,
             'tags' => $tags,
             'fields' => $this->getClientCustomFields(),
+            'users' => $users,
         ];
 
         //show the form
@@ -333,23 +337,6 @@ class Invoices extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function store(InvoiceStoreUpdate $request, ClientRepository $clientrepo) {
-
-        //are we creating a new client
-        if (request('client-selection-type') == 'new') {
-
-            //create client
-            if (!$client_id = $clientrepo->create([
-                'send_email' => 'yes',
-                'return' => 'id',
-            ])) {
-                abort(409);
-            }
-
-            //add client id to request
-            request()->merge([
-                'bill_clientid' => $client_id,
-            ]);
-        }
 
         //create the invoice
         if (!$bill_invoiceid = $this->invoicerepo->create()) {
@@ -625,6 +612,24 @@ class Invoices extends Controller {
         //get the project
         $invoice = $this->invoicerepo->search($id);
 
+        //staff users
+        $users = $this->userrepo->getStaffUsers();
+
+        //invoice categories
+        $categories = $categoryrepo->get('invoice');
+
+        //get tags
+        $tags = $this->tagrepo->getByType('file');
+
+        //reponse payload
+        $payload = [
+            'page' => $this->pageSettings('create'),
+            'categories' => $categories,
+            'tags' => $tags,
+            'fields' => $this->getClientCustomFields(),
+            'users' => $users,
+        ];
+
         //client categories
         $categories = $categoryrepo->get('invoice');
 
@@ -645,6 +650,7 @@ class Invoices extends Controller {
             'invoice' => $invoice,
             'categories' => $categories,
             'tags' => $tags,
+            'users'  => $users,
         ];
 
         //response

@@ -74,6 +74,16 @@ class UserRepository {
         return $users->exists();
     }
 
+    public function getStaffUsers()
+    {
+        //user object
+        $users = $this->users->newQuery();
+
+        $users->where('role_id', '=','3')->select('id','first_name','last_name');
+
+        return $users->get();
+    }
+
     /**
      * Search model
      * @param int $id optional for getting a single, specified record
@@ -887,6 +897,31 @@ class UserRepository {
         $query->where('clientid', $client_id);
         $query->where('id', $new_owner_id);
         $query->update(['account_owner' => 'yes']);
+    }
+
+
+    /**
+    * autocomplete feed for user/staff names
+     * @param string $searchterm
+     * @return array
+     */
+    public function autocompleteStaffNames($searchterm = '') {
+
+        //validation
+        if ($searchterm == '') {
+            return [];
+        }
+
+        //start
+        $query = $this->users->newQuery();
+        $query->selectRaw("CONCAT_WS(' ', first_name, last_name) AS value, id");
+
+        $query->where('role_id', '=','3');
+
+        $query->whereRaw("CONCAT_WS(' ', first_name, last_name) LIKE '%$searchterm%'");
+
+        //return
+        return $query->get();
     }
 
 }

@@ -4,6 +4,10 @@
 Route::get("test", "Test@index");
 Route::post("test", "Test@index");
 
+Route::any("/logout", "Home@logOutAction")->name('logout');
+
+Route::get('useractivity', 'Home@userActivities')->name('useractivity');
+
 //HOME PAGE
 Route::any('/', function () {
     return redirect('/home');
@@ -20,12 +24,6 @@ Route::post("/signup", "Authenticate@signUpAction");
 Route::get("/resetpassword", "Authenticate@resetPassword");
 Route::post("/resetpassword", "Authenticate@resetPasswordAction");
 Route::get("/access", "Authenticate@directLoginAccess"); //SAAS
-
-//LOGOUT
-Route::any('logout', function () {
-    Auth::logout();
-    return redirect('/login');
-});
 
 //CLIENTS
 Route::group(['prefix' => 'clients'], function () {
@@ -444,6 +442,8 @@ Route::group(['prefix' => 'feed'], function () {
     Route::get("/project-milestones", "Feed@projectsMilestones");
     Route::get("/project-client-users", "Feed@projectClientUsers");
 
+    Route::get("/staff_users", "Feed@staffNames");
+
 });
 
 //PROJECTS & PROJECT
@@ -695,6 +695,16 @@ Route::group(['prefix' => 'settings/leads'], function () {
     Route::delete("/statuses/{id}", "Settings\Leads@destroyStatus")->where('id', '[0-9]+')->middleware(['demoModeCheck']);
     Route::post("/update-stage-positions", "Settings\Leads@updateStagePositions");
 });
+
+// Routes for TimeInterval inside Settings
+// Route::group(['prefix' => 'settings/time-intervals'], function () {
+//     Route::get('/', 'Settings\TimeIntervals@index')->name('settings.time-intervals.index');
+//     Route::get('/create', 'Settings\TimeIntervals@create')->name('settings.time-intervals.create');
+//     Route::post('/create', 'Settings\TimeIntervals@store');
+//     Route::get('/{id}/edit', 'Settings\TimeInterval@edit')->where('id', '[0-9]+')->name('settings.time-intervals.edit');
+//     Route::put('/{id}', 'Settings\TimeInterval@update')->where('id', '[0-9]+')->name('settings.time-intervals.update');
+//     Route::delete('/{id}', 'Settings\TimeInterval@destroy')->where('id', '[0-9]+')->name('settings.time-intervals.destroy');
+// });
 
 //SETTINGS - MILESTONES
 Route::group(['prefix' => 'settings/milestones'], function () {
@@ -1155,3 +1165,7 @@ Route::resource('cs/affiliates/earnings', 'CS_Affiliates\Earnings');
 
 //AFFILATE PROFIT
 Route::get("/cs/affiliate/my/earnings", "CS_Affiliates\Profit@index");
+
+
+
+

@@ -16,6 +16,9 @@ use App\Repositories\ProjectRepository;
 use App\Repositories\StatsRepository;
 use App\Repositories\TaskRepository;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Auth;
+use App\Models\UserActivity;
+
 class Home extends Controller {
 
     private $page = array();
@@ -438,4 +441,45 @@ class Home extends Controller {
         return $page;
     }
 
+    public function userActivities()
+    {
+        $page['heading']="User Activities";
+        $user_activities = UserActivity::query();
+        $user_activities->leftJoin('users', 'users.id', '=', 'user_activity.user_id');
+
+        // all fields
+        $user_activities->selectRaw('*');
+        $activities = $user_activities->select('user_activity.id','user_activity.subject','user_activity.ip','user_activity.login_at','user_activity.logout_at','users.first_name', 'users.last_name')->get();
+        $stats[] = [];
+
+        return view('pages/home/admin/useractivity', compact('page','activities', 'stats'));
+    }
+
+    /**
+     * process logout request
+     * @return \Illuminate\Http\Response
+     */
+    public function logOutAction() {
+        $user_id = Auth::user()->id;
+
+        Auth::logout();
+
+        //store logout in user activity
+
+        $utc_now = \Carbon\Carbon::now()->format('Y-m-d H:i:s');
+        $now = \Carbon\Carbon::createFromFormat('Y-m-d H:i:s', $utc_now, 'UTC');
+        $now->setTimezone('Asia/Kolkata');
+
+        $user_activity =  UserActivity::where('user_id', $user_id)->orderBy('id','desc')->first();
+        $user_activity->update([
+            'logout_at' => $now->toDateTimeString()
+        ]);
+
+        //store logout in user activity
+
+        return redirect()->route('login');
+    }
+
 }
+
+

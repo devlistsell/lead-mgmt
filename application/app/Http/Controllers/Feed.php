@@ -338,4 +338,17 @@ class Feed extends Controller {
 
         return response()->json($feed);
     }
+
+
+    /** 
+     * 15 nov 2024
+     * ajax search results for users/partners name
+     * @return \Illuminate\Http\Response
+     */
+    public function staffNames(UserRepository $userrepo) {
+
+        $feed = $userrepo->autocompleteStaffNames(request('term'));
+
+        return response()->json($feed);
+    }
 }

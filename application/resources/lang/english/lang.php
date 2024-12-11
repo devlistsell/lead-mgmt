@@ -276,7 +276,7 @@ return [
     'comments' => "Comments",
     'company_details' => "Company Details",
     'company_logo' => "Company Logo",
-    'company_name' => "Company Name",
+    'company_name' => "Partner Name",
     'company' => "Company",
     'complete_your_payment' => "Complete Your Payment",
     'completed_projects' => "Completed Projects",
@@ -2466,4 +2466,5 @@ return [
     'foo' => "bar",
     'foo' => "bar",
     'foo' => "bar",
+    'useractivity' => "User Activity", // 19 nov 2024
 ];

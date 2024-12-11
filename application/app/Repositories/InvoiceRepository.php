@@ -42,11 +42,8 @@ class InvoiceRepository {
 
         $invoices = $this->invoices->newQuery();
 
-        //joins
-        $invoices->leftJoin('clients', 'clients.client_id', '=', 'invoices.bill_clientid');
-        $invoices->leftJoin('projects', 'projects.project_id', '=', 'invoices.bill_projectid');
         $invoices->leftJoin('categories', 'categories.category_id', '=', 'invoices.bill_categoryid');
-        $invoices->leftJoin('users', 'users.id', '=', 'invoices.bill_creatorid');
+        $invoices->leftJoin('users as users', 'users.id', '=', 'invoices.bill_creatorid');
         $invoices->leftJoin('pinned', function ($join) {
             $join->on('pinned.pinnedresource_id', '=', 'invoices.bill_invoiceid')
                 ->where('pinned.pinnedresource_type', '=', 'invoice');
@@ -54,6 +51,8 @@ class InvoiceRepository {
                 $join->where('pinned.pinned_userid', auth()->id());
             }
         });
+
+        $invoices->leftJoin('users as usr', 'usr.id', '=', 'invoices.bill_userid');
 
         //join: users reminders - do not do this for cronjobs
         if (auth()->check()) {
@@ -86,17 +85,11 @@ class InvoiceRepository {
                                       AS invoice_balance');
 
         //client primary contact - name
+        
         $invoices->selectRaw("(SELECT CONCAT(first_name, ' ', last_name)
                                       FROM users
-                                      WHERE users.clientid = invoices.bill_clientid
-                                      AND account_owner = 'yes')
+                                      WHERE users.id = invoices.bill_userid)
                                       AS contact_name");
-        //client primary contact - id
-        $invoices->selectRaw("(SELECT id
-                                      FROM users
-                                      WHERE users.clientid = invoices.bill_clientid
-                                      AND account_owner = 'yes')
-                                      AS contact_id");
 
         //last payment amount
         $invoices->selectRaw('COALESCE((SELECT payment_amount
@@ -152,15 +145,25 @@ class InvoiceRepository {
         //do not show items that not yet ready (i.e exclude items in the process of being cloned that have status 'invisible')
         $invoices->where('bill_visibility', 'visible');
 
-        //filter clients
-        if (request()->filled('filter_bill_clientid')) {
-            $invoices->where('bill_clientid', request('filter_bill_clientid'));
+        //filter for user invoices
+
+        $role_id= auth()->user()->role_id;
+        if($role_id != 1)
+        {
+            $invoices = $invoices->where('bill_userid', auth()->user()->id);
         }
 
-        //filter projects
-        if (request()->filled('filter_bill_projectid')) {
-            $invoices->where('bill_projectid', request('filter_bill_projectid'));
-        }
+
+        //filter clients
+
+        // if (request()->filled('filter_bill_clientid')) {
+        //     $invoices->where('bill_clientid', request('filter_bill_clientid'));
+        // }
+
+        // //filter projects
+        // if (request()->filled('filter_bill_projectid')) {
+        //     $invoices->where('bill_projectid', request('filter_bill_projectid'));
+        // }
 
         //filter: amount (min)
         if (request()->filled('filter_bill_final_amount_min')) {
@@ -423,9 +426,8 @@ class InvoiceRepository {
         //save new user
         $invoice = new $this->invoices;
 
-        //data
-        $invoice->bill_clientid = request('bill_clientid');
-        $invoice->bill_projectid = request('bill_projectid');
+        $invoice->bill_userid = request('bill_userid');
+        
         $invoice->bill_creatorid = auth()->id();
         $invoice->bill_categoryid = request('bill_categoryid');
         $invoice->bill_date = request('bill_date');
@@ -454,7 +456,9 @@ class InvoiceRepository {
         if (!$invoice = $this->invoices->find($id)) {
             return false;
         }
-
+        
+        $invoice->bill_userid = request('bill_userid');
+        
         //general
         $invoice->bill_categoryid = request('bill_categoryid');
         $invoice->bill_date = request('bill_date');

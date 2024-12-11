@@ -3,7 +3,7 @@
     <div class="x-title" id="invoice-pay-title-select-method">{{ cleanLang(__('lang.select_payment_method')) }}</div>
     <div class="x-options" id="invoice-pay-options-container">
         <!--stripe-->
-        @if(config('system.settings_stripe_status') == 'enabled')
+        @if(config('system.settings_stripe_status') == 'enabled' && auth()->check() && auth()->user()->role->role_id == 2)
         <div class="x-checkbox">
             <label class="x-label">{{ config('system.settings_stripe_display_name') }}</label>
             <input name="group5" type="radio" id="radio_payment_stripe" data-gateway-id="gateway-stripe"
@@ -13,7 +13,7 @@
         </div>
         @endif
         <!--razorpay-->
-        @if(config('system.settings_razorpay_status') == 'enabled')
+        @if(config('system.settings_razorpay_status') == 'enabled' && auth()->check() && auth()->user()->role->role_id == 2)
         <div class="x-checkbox">
             <label class="x-label">{{ config('system.settings_razorpay_display_name') }}</label>
             <input name="group5" type="radio" id="radio_payment_razorpay" data-gateway-id="gateway-razorpay"
@@ -23,7 +23,7 @@
         </div>
         @endif
         <!--paypal-->
-        @if(config('system.settings_paypal_status') == 'enabled')
+        @if(config('system.settings_paypal_status') == 'enabled' && auth()->check() && auth()->user()->role->role_id == 2)
         <div class="x-checkbox">
             <label class="x-label">{{ config('system.settings_paypal_display_name') }}</label>
             <input name="group5" type="radio" id="radio_payment_paypal" data-gateway-id="gateway-paypal"
@@ -33,7 +33,7 @@
         </div>
         @endif
         <!--mollie-->
-        @if(config('system.settings_mollie_status') == 'enabled')
+        @if(config('system.settings_mollie_status') == 'enabled' && auth()->check() && auth()->user()->role->role_id == 2)
         <div class="x-checkbox">
             <label class="x-label">{{ config('system.settings_mollie_display_name') }}</label>
             <input name="group5" type="radio" id="radio_payment_mollie" data-gateway-id="gateway-mollie"
@@ -44,7 +44,7 @@
         </div>
         @endif
         <!--tap-->
-        @if(config('system.settings2_tap_status') == 'enabled')
+        @if(config('system.settings2_tap_status') == 'enabled' && auth()->check() && auth()->user()->role->role_id == 2)
         <div class="x-checkbox">
             <label class="x-label">{{ config('system.settings2_tap_display_name') }}</label>
             <input name="group5" type="radio" id="radio_payment_tap" data-gateway-id="gateway-tap"
@@ -55,7 +55,7 @@
         @endif
 
         <!--paystack-->
-        @if(config('system.settings2_paystack_status') == 'enabled')
+        @if(config('system.settings2_paystack_status') == 'enabled' && auth()->check() && auth()->user()->role->role_id == 2)
         <div class="x-checkbox">
             <label class="x-label">{{ config('system.settings2_paystack_display_name') }}</label>
             <input name="group5" type="radio" id="radio_payment_paystack" data-gateway-id="gateway-paystack"

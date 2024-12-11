@@ -27,6 +27,7 @@ class CreateResponse implements Responsable {
     public function toResponse($request) {
 
         //set all data to arrays
+        //dd($request);
         foreach ($this->payload as $key => $value) {
             $$key = $value;
         }

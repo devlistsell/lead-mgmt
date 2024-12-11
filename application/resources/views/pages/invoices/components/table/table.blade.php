@@ -6,7 +6,7 @@
                 data-page-size="10">
                 <thead>
                     <tr>
-                        @if(config('visibility.invoices_col_checkboxes'))
+                        @if(config('visibility.invoices_col_checkboxes') && auth()->user()->role->role_id == '1')
                         <th class="list-checkbox-wrapper">
                             <!--list checkbox-->
                             <span class="list-checkboxes display-inline-block w-px-20">

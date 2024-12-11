@@ -19,6 +19,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
 use Validator;
+use App\Models\UserActivity;
 
 class Authenticate extends Controller {
 
@@ -145,6 +146,21 @@ class Authenticate extends Controller {
 
         //check credentials
         if (Auth::attempt($credentials, $remember)) {
+            //19 nov 2024
+            //start log user login
+            $user_activity = new UserActivity;
+
+            //data
+            $user_activity->subject = 'login';
+            $user_activity->url = \Request::fullUrl();
+            $user_activity->ip = \Request::ip();
+            $user_activity->agent = \Request::header('user-agent');
+            $user_activity->user_id = Auth::user()->id;
+                
+            $user_activity->save();
+
+            //end log user login
+
             //if client - check if account is not suspended
             if (auth()->user()->is_client) {
                 if ($client = \App\Models\Client::Where('client_id', auth()->user()->clientid)->first()) {
@@ -362,5 +378,4 @@ class Authenticate extends Controller {
         //return
         return $page;
     }
-
 }

@@ -93,19 +93,66 @@ class LeadAssignedRepository {
      * @param numeric $id the id of the resource
      * @return object
      */
-    public function getAssigned($id = '') {
+    // public function getAssigned($id = '') {
 
-        //validations
-        if (!is_numeric($id)) {
+    //     //validations
+    //     if (!is_numeric($id)) {
+    //         return [];
+    //     }
+
+    //     $query = $this->assigned->newQuery();
+    //     $query->leftJoin('users', 'users.id', '=', 'leads_assigned.leadsassigned_userid');
+    //     $query->where('leadsassigned_leadid', $id);
+    //     $query->orderBy('first_name', 'ASC');
+    //     $assigned = $query->get();
+
+    //     foreach($assigned as $assignee)
+    //     {
+    //         $user_id = $assignee->leadsassigned_userid;
+    //         $assignee->total_leads = LeadAssigned::where('leadsassigned_userid',$user_id)->get()->count();
+    //     }
+
+    //     return $assigned;
+    // }
+
+    public function getAssigned($id = '') {
+    // Validations
+    if (!is_numeric($id)) {
+        Log::error("Validation error - invalid lead ID", [
+            'function' => __FUNCTION__,
+            'lead_id' => $id
+        ]);
+        return [];
+    }
+
+        try {
+            // Fetch assigned users with total lead count
+            $assigned = $this->assigned
+                ->leftJoin('users', 'users.id', '=', 'leads_assigned.leadsassigned_userid')
+                ->select(
+                    'users.id as user_id',
+                    'users.first_name',
+                    'users.avatar_directory',
+                    'users.avatar_filename',
+                    \DB::raw('(SELECT COUNT(*) FROM leads_assigned WHERE leads_assigned.leadsassigned_userid = users.id) as total_leads')
+                )
+                ->where('leads_assigned.leadsassigned_leadid', $id)
+                ->orderBy('users.first_name', 'ASC')
+                ->get();
+
+            return $assigned;
+        } catch (\Exception $e) {
+            // Log the error for debugging
+            Log::error("Error fetching assigned users", [
+                'function' => __FUNCTION__,
+                'lead_id' => $id,
+                'error' => $e->getMessage()
+            ]);
+
             return [];
         }
-
-        $query = $this->assigned->newQuery();
-        $query->leftJoin('users', 'users.id', '=', 'leads_assigned.leadsassigned_userid');
-        $query->where('leadsassigned_leadid', $id);
-        $query->orderBy('first_name', 'ASC');
-        return $query->get();
     }
+
 
 
     /**

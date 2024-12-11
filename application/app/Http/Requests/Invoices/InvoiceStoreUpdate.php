@@ -60,40 +60,46 @@ class InvoiceStoreUpdate extends FormRequest {
         /**-------------------------------------------------------
          * [create][existing client] only rules
          * ------------------------------------------------------*/
-        if ($this->getMethod() == 'POST' && request('client-selection-type') == 'existing') {
-            $rules += [
-                'bill_clientid' => [
-                    'required',
-                    Rule::exists('clients', 'client_id'),
-                ],
-                'bill_projectid' => [
-                    'nullable',
-                    Rule::exists('projects', 'project_id'),
-                ],
-            ];
-        }
+
+         //13 nov 2024 (remove rules)
+
+        // if ($this->getMethod() == 'POST' && request('client-selection-type') == 'existing') {
+        //     $rules += [
+        //         'bill_clientid' => [
+        //             'required',
+        //             Rule::exists('clients', 'client_id'),
+        //         ],
+        //         'bill_projectid' => [
+        //             'nullable',
+        //             Rule::exists('projects', 'project_id'),
+        //         ],
+        //     ];
+        // }
 
         /**-------------------------------------------------------
          * [create][new client] only rules
          * ------------------------------------------------------*/
-        if ($this->getMethod() == 'POST' && request('client-selection-type') == 'new') {
-            $rules += [
-                'client_company_name' => [
-                    'required',
-                ],
-                'first_name' => [
-                    'required',
-                ],
-                'last_name' => [
-                    'required',
-                ],
-                'email' => [
-                    'required',
-                    'email',
-                    'unique:users,email',
-                ],
-            ];
-        }
+
+         // 13 nov 2024 -- remove rules
+
+        // if ($this->getMethod() == 'POST' && request('client-selection-type') == 'new') {
+        //     $rules += [
+        //         'client_company_name' => [
+        //             'required',
+        //         ],
+        //         'first_name' => [
+        //             'required',
+        //         ],
+        //         'last_name' => [
+        //             'required',
+        //         ],
+        //         'email' => [
+        //             'required',
+        //             'email',
+        //             'unique:users,email',
+        //         ],
+        //     ];
+        // }
 
         /**-------------------------------------------------------
          * [update] only rules

@@ -516,7 +516,7 @@
 
                             <li role="separator" class="divider"></li>
                             <li>
-                                <a href="/logout">
+                                <a href="<?php echo e(route('logout')); ?>">
                                     <i class="fa fa-power-off p-r-4"></i> <?php echo e(cleanLang(__('lang.logout'))); ?></a>
                             </li>
                         </ul>

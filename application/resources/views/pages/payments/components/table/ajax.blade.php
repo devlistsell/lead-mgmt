@@ -1,7 +1,7 @@
 @foreach($payments as $payment)
 <!--each row-->
 <tr id="payment_{{ $payment->payment_id }}" class="{{ $payment->pinned_status ?? '' }}">
-    @if(config('visibility.payments_col_checkboxes'))
+    @if(config('visibility.payments_col_checkboxes') && auth()->user()->role->role_id == '1')
     <td class="payments_col_checkbox checkitem" id="payments_col_checkbox_{{ $payment->payment_id }}">
         <!--list checkbox-->
         <span class="list-checkboxes display-inline-block w-px-20">
@@ -29,17 +29,7 @@
     @endif
     <td class="payments_col_amount" id="payments_col_amount_{{ $payment->payment_id }}">
         {{ runtimeMoneyFormat($payment->payment_amount) }}</td>
-    @if(config('visibility.payments_col_client'))
-    <td class="payments_col_client" id="payments_col_client_{{ $payment->payment_id }}">
-        <a
-            href="/clients/{{ $payment->payment_clientid }}">{{ str_limit($payment->client_company_name ?? '---', 20) }}</a>
-    </td>
-    @endif
-    @if(config('visibility.payments_col_project'))
-    <td class="payments_col_project" id="payments_col_project_{{ $payment->payment_id }}">
-        <a href="/projects/{{ $payment->payment_projectid }}">{{ str_limit($payment->project_title ?? '---', 25) }}</a>
-    </td>
-    @endif
+    
     <td class="payments_col_transaction hidden" id="payments_col_transaction_{{ $payment->payment_id }}">
         {{ str_limit($payment->payment_transaction_id ?? '---', 20) }}</td>
     @if(config('visibility.payments_col_method'))
@@ -52,7 +42,7 @@
         <!--action button-->
         <span class="list-table-action font-size-inherit">
             <!--edit-->
-            @if(config('visibility.action_buttons_edit'))
+            @if(config('visibility.action_buttons_edit') && auth()->user()->role->role_id == '1') 
             <button type="button" title="{{ cleanLang(__('lang.edit')) }}"
                 class="data-toggle-action-tooltip btn btn-outline-success btn-circle btn-sm edit-add-modal-button js-ajax-ux-request reset-target-modal-form"
                 data-toggle="modal" data-target="#commonModal"
